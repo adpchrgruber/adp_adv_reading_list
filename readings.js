@@ -2,7 +2,7 @@
 // Fields: a = author(s), t = title, y = year (number, used for the timeline),
 //         p = publisher / source, url = optional link, kind = "book" | "article"
 // Optional for citations: ytext = year as printed (e.g. "1983–85"),
-//         edBy = editors of an authored book, journal / no / date = for articles.
+//         edBy = editors of an authored book, edn = edition (e.g. "5th ed."), journal / no / date = for articles.
 // Authors: "Last, First" separated by ";" — add " (Ed.)" / " (Eds.)" for editors.
 // Categories are listed in display order; each entry sits under one.
 
@@ -71,6 +71,7 @@ window.READINGS = [
       { a: "Lister, Martin", t: "The Photographic Image in Digital Culture", p: "Routledge", y: 2013 },
       { a: "Marcoci, Roxana; Eugenides, Jeffrey; Demand, Thomas", t: "Thomas Demand [MoMA Exhibition Catalog]", p: "Museum of Modern Art", y: 2005 },
       { a: "Mulvey, Laura", t: "Visual and Other Pleasures", p: "Indiana University Press", y: 1989 },
+      { a: "Rose, Gillian", t: "Visual Methodologies: An Introduction to Researching with Visual Materials", p: "SAGE", y: 2022, edn: "5th ed." },
       { a: "Sekula, Allan", t: "Fish Story", p: "Richter Verlag", y: 1995 },
       { a: "Sontag, Susan", t: "On Photography", p: "Anchor Books", y: 1990 },
       { a: "Szarkowski, John", t: "The Photographer’s Eye", p: "Museum of Modern Art", y: 1966 }

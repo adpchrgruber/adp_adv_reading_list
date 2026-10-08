@@ -355,6 +355,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
     } else {
       parts.push(chicagoTitle(i.t) + (/[?!]$/.test(i.t) ? "" : "."));
       if (i.edBy) parts.push(`Edited by ${esc(i.edBy)}.`);
+      if (i.edn) parts.push(esc(i.edn));
       const pub = [i.p, yr].filter(Boolean).map(esc).join(", ");
       parts.push(pub ? `${pub}.` : "n.d.");
     }
