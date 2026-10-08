@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADP Reading List</title>
+<meta name="description" content="Reading list for the Advanced Introduction into ADP, WS 25/26.">
+<script>try{var t=localStorage.getItem("adp-reading-list:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>
+:root{
+  --paper:#FFFFFF;
+  --ink:#000000;
+  --muted:#707070;
+  --line:#E3E3E3;
+  --soft:#EFEFEF;
+  --blue:#002FA7;
+  --on-blue:#FFFFFF;
+  --sans:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#242426; --ink:#F2F2F0; --muted:#9A9AA0; --line:#3A3A3D; --soft:#303033;
+    --blue:#7D97FF; --on-blue:#242426; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#242426; --ink:#F2F2F0; --muted:#9A9AA0; --line:#3A3A3D; --soft:#303033;
+  --blue:#7D97FF; --on-blue:#242426; color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--blue)}
+button{font-family:var(--sans);cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;background:var(--paper);padding:8px 12px}
+.skip:focus{left:16px;z-index:10}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+
+/* ---------- header ---------- */
+header{padding:36px 0 0;position:relative}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.eyebrow .blue{color:var(--blue)}
+h1{
+  font-weight:700;font-size:clamp(34px,6.5vw,64px);
+  line-height:.98;letter-spacing:-.03em;margin:16px 0 6px;
+}
+.subtitle{font-size:clamp(15px,2.4vw,20px);letter-spacing:-.01em;margin-bottom:30px}
+#theme{
+  position:absolute;top:32px;right:24px;
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  border:1.5px solid var(--ink);background:var(--paper);padding:8px 12px;border-radius:0;
+}
+#theme:hover{background:var(--ink);color:var(--paper)}
+nav.tabs{display:flex;gap:32px}
+.tab{
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  background:none;border:none;border-bottom:3px solid transparent;
+  padding:12px 0;color:var(--muted);
+}
+.tab[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--blue)}
+.tab:hover{color:var(--ink)}
+.tab .n{color:var(--blue);margin-left:6px;font-variant-numeric:tabular-nums}
+
+/* ---------- controls ---------- */
+.controls{position:sticky;top:0;background:var(--paper);z-index:5;border-bottom:1px solid var(--line);padding:18px 0 12px}
+.searchrow{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+#q{
+  font-family:var(--sans);font-size:15px;flex:1;min-width:200px;
+  background:var(--paper);border:none;border-bottom:2px solid var(--ink);border-radius:0;
+  padding:8px 0;color:var(--ink);
+}
+#q::placeholder{color:var(--muted)}
+#q:focus{border-bottom-color:var(--blue);outline:none}
+.count{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:2px 18px;padding:12px 0 0}
+.chip{
+  font-size:12px;font-weight:700;letter-spacing:.02em;
+  border:none;background:none;color:var(--blue);padding:3px 0;text-align:left;
+}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{color:var(--on-blue);background:var(--blue);padding:3px 6px;margin:0 -6px}
+
+/* ---------- list ---------- */
+main{padding:0 0 90px}
+.statusbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:18px 0 0;min-height:52px}
+.actions{display:none;gap:8px}
+.showing-mine .actions{display:flex}
+.btn{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  border:1.5px solid var(--ink);background:var(--paper);padding:9px 14px;border-radius:0;
+}
+.btn:hover{background:var(--ink);color:var(--paper)}
+h2{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:38px 0 4px;padding-bottom:10px;border-bottom:1.5px solid var(--ink)}
+h2 .num{color:var(--blue);margin-right:10px;font-variant-numeric:tabular-nums}
+h2.decade{color:var(--blue)}
+
+ul.list{list-style:none}
+li.item{
+  display:grid;grid-template-columns:26px 1fr auto;gap:2px 14px;align-items:baseline;
+  padding:13px 0;border-bottom:1px solid var(--soft);
+}
+.timeline li.item{grid-template-columns:26px 52px 1fr}
+.mark{
+  width:26px;height:22px;border:none;background:none;padding:0;
+  display:flex;align-items:center;align-self:start;margin-top:2px;
+}
+.mark span{width:12px;height:12px;border:1.5px solid var(--ink);background:var(--paper);transition:background .1s,border-color .1s}
+.mark:hover span{border-color:var(--blue)}
+.mark[aria-pressed="true"] span{background:var(--blue);border-color:var(--blue)}
+.yr{font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.author{font-size:13px;font-weight:700;letter-spacing:.01em}
+.title{display:block;font-size:17px;line-height:1.35;letter-spacing:-.01em;margin:2px 0}
+li.item:hover .title{color:var(--blue)}
+.meta{font-size:13px;color:var(--muted)}
+.meta a{font-weight:700;text-decoration:none}
+.meta a:hover{color:var(--ink)}
+.tag{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-left:10px}
+.side{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);text-align:right}
+mark{background:none;color:var(--blue);box-shadow:inset 0 -1.5px 0 var(--blue)}
+.empty{padding:50px 0;font-size:13px;color:var(--muted)}
+
+footer{padding:20px 0 48px;font-size:11px;letter-spacing:.03em;color:var(--muted);line-height:1.9;text-transform:uppercase;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+.linkbtn{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--blue);font-weight:700;background:none;border:none;padding:0}
+.linkbtn:hover{color:var(--ink)}
+
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  #theme{right:16px;top:28px}
+  h1{padding-right:72px}
+  nav.tabs{gap:22px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none;padding-bottom:4px}
+  .chip{flex:none}
+  li.item{grid-template-columns:26px 1fr}
+  .timeline li.item{grid-template-columns:26px 42px 1fr}
+  li.item .side{display:none}
+}
+@media print{
+  .controls,footer,.skip,.actions,.mark,#theme,nav.tabs{display:none!important}
+  :root{--paper:#fff;--ink:#000;--muted:#555;--blue:#002FA7}
+  li.item,.timeline li.item{grid-template-columns:1fr auto;break-inside:avoid}
+  .timeline li.item{grid-template-columns:52px 1fr}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#list">Skip to list</a>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow" id="course"></p>
+    <h1>Reading List</h1>
+    <p class="subtitle" id="subtitle"></p>
+    <button type="button" id="theme" aria-pressed="false">Dark</button>
+    <nav class="tabs" aria-label="Sort and view">
+      <button type="button" class="tab" data-sort="category" aria-pressed="true">Category</button>
+      <button type="button" class="tab" data-sort="timeline" aria-pressed="false">Timeline</button>
+      <button type="button" class="tab" data-sort="author" aria-pressed="false">A–Z</button>
+      <button type="button" class="tab" id="mine" aria-pressed="false">My list<span class="n" id="mineCount">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="searchrow">
+      <label class="sr-only" for="q">Search authors, titles, publishers, years</label>
+      <input id="q" type="search" placeholder="Search author, title, publisher, year …" autocomplete="off">
+      <span class="count" id="status" aria-live="polite"></span>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+  </div>
+</div>
+
+<main class="wrap" id="list" tabindex="-1">
+  <div class="statusbar">
+    <span class="count" id="listnote"></span>
+    <div class="actions">
+      <button type="button" class="btn" id="copy">Copy list</button>
+      <button type="button" class="btn" id="print">Print / PDF</button>
+    </div>
+  </div>
+  <div id="out"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Mark texts of interest to compile your own list · saved only in this browser</span>
+    <button type="button" class="linkbtn" id="reset">Clear my list</button>
+  </div>
+</footer>
+
+<script src="readings.js"></script>
+<script>
+(() => {
+  const STORE = "adp-reading-list:mine";
+  const C = window.COURSE;
+  // Theme: follows the system until the switch is used, then remembered.
+  const root = document.documentElement, themeBtn = document.getElementById("theme");
+  const sysDark = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : sysDark.matches;
+  const syncTheme = () => {
+    themeBtn.textContent = isDark() ? "Light" : "Dark";
+    themeBtn.setAttribute("aria-label", isDark() ? "Switch to light mode" : "Switch to dark mode");
+  };
+  try { const t = localStorage.getItem("adp-reading-list:theme"); if (t) root.dataset.theme = t; } catch {}
+  themeBtn.addEventListener("click", () => {
+    root.dataset.theme = isDark() ? "light" : "dark";
+    try { localStorage.setItem("adp-reading-list:theme", root.dataset.theme); } catch {}
+    syncTheme();
+  });
+  sysDark.addEventListener("change", syncTheme);
+  syncTheme();
+
+  // Flatten data with stable ids (author + title).
+  const cats = window.READINGS.map(g => g.category);
+  const items = window.READINGS.flatMap(g => g.items.map(it => ({
+    ...it, category: g.category, id: (it.a + "|" + it.t).toLowerCase()
+  })));
+
+  document.getElementById("course").innerHTML =
+    `<span class="blue">Reading list</span> · ${C.term} · ${items.length} titles`;
+  document.getElementById("subtitle").textContent = `${C.title} — ${C.teacher}`;
+
+  const load = () => { try { return new Set(JSON.parse(localStorage.getItem(STORE) || "[]")); } catch { return new Set(); } };
+  const save = () => { try { localStorage.setItem(STORE, JSON.stringify([...mine])); } catch {} };
+  const mine = load();
+
+  const state = { q: "", sort: "category", onlyMine: false, cats: new Set() };
+
+  // Restore view from URL hash, e.g. #sort=timeline&cat=2
+  const hp = new URLSearchParams(location.hash.slice(1));
+  if (["category", "timeline", "author"].includes(hp.get("sort"))) state.sort = hp.get("sort");
+  (hp.get("cat") || "").split(",").filter(Boolean).forEach(i => cats[+i] && state.cats.add(cats[+i]));
+  const writeHash = () => {
+    const p = new URLSearchParams();
+    if (state.sort !== "category") p.set("sort", state.sort);
+    if (state.cats.size) p.set("cat", [...state.cats].map(c => cats.indexOf(c)).join(","));
+    const h = p.toString();
+    history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+  };
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const norm = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const hl = (text) => {
+    const safe = esc(text);
+    if (!state.q) return safe;
+    const n = norm(text), q = norm(state.q);
+    const idx = n.indexOf(q);
+    if (idx < 0 || n.length !== text.length) return safe;
+    return esc(text.slice(0, idx)) + "<mark>" + esc(text.slice(idx, idx + q.length)) + "</mark>" + esc(text.slice(idx + q.length));
+  };
+
+  // Category chips
+  const chipsEl = document.getElementById("chips");
+  function renderChips() {
+    const all = `<button type="button" class="chip" data-cat="" aria-pressed="${state.cats.size === 0}">All categories</button>`;
+    chipsEl.innerHTML = all + cats.map(c =>
+      `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${state.cats.has(c)}">${esc(c)}</button>`
+    ).join("");
+  }
+  chipsEl.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    const c = b.dataset.cat;
+    if (!c) state.cats.clear();
+    else state.cats.has(c) ? state.cats.delete(c) : state.cats.add(c);
+    renderChips(); render(); writeHash();
+  });
+
+  // Tabs: three sort views plus "My list" (keeps the last sort order).
+  const mineBtn = document.getElementById("mine");
+  const sortTabs = document.querySelectorAll(".tab[data-sort]");
+  const syncTabs = () => {
+    sortTabs.forEach(b => b.setAttribute("aria-pressed", !state.onlyMine && b.dataset.sort === state.sort));
+    mineBtn.setAttribute("aria-pressed", state.onlyMine);
+    document.body.classList.toggle("showing-mine", state.onlyMine);
+  };
+  sortTabs.forEach(b => b.addEventListener("click", () => {
+    state.sort = b.dataset.sort; state.onlyMine = false; syncTabs(); writeHash(); render();
+  }));
+  mineBtn.addEventListener("click", () => { state.onlyMine = true; syncTabs(); render(); });
+  syncTabs();
+  const updateCount = () => {
+    document.getElementById("mineCount").textContent = mine.size;
+    mineBtn.setAttribute("aria-label", `My list, ${mine.size} ${mine.size === 1 ? "text" : "texts"}`);
+  };
+
+  const qEl = document.getElementById("q");
+  qEl.addEventListener("input", () => { state.q = qEl.value.trim(); render(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "/" && document.activeElement !== qEl) { e.preventDefault(); qEl.focus(); }
+    if (e.key === "Escape" && document.activeElement === qEl) { qEl.value = ""; state.q = ""; render(); }
+  });
+
+  // Bookmarks
+  const out = document.getElementById("out");
+  out.addEventListener("click", e => {
+    const b = e.target.closest(".mark"); if (!b) return;
+    const id = b.dataset.id, on = !mine.has(id);
+    on ? mine.add(id) : mine.delete(id);
+    save(); updateCount();
+    b.setAttribute("aria-pressed", on);
+    if (state.onlyMine) render();
+  });
+  document.getElementById("reset").addEventListener("click", () => {
+    if (!mine.size || !confirm("Remove all texts from your list?")) return;
+    mine.clear(); save(); updateCount(); render();
+  });
+
+  // Export my list
+  const cite = i => [i.a, i.t, [i.p, i.y && !String(i.p).includes(i.y) ? i.y : ""].filter(Boolean).join(", "), i.url]
+    .filter(Boolean).join(". ").replace(/\.\./g, ".") + ".";
+  const copyBtn = document.getElementById("copy");
+  copyBtn.addEventListener("click", async () => {
+    const text = currentList().map(cite).join("\n");
+    try { await navigator.clipboard.writeText(text); copyBtn.textContent = "Copied ✓"; }
+    catch { prompt("Copy your list:", text); }
+    setTimeout(() => copyBtn.textContent = "Copy list", 1600);
+  });
+  document.getElementById("print").addEventListener("click", () => window.print());
+
+  function matches(i) {
+    if (state.onlyMine && !mine.has(i.id)) return false;
+    if (state.cats.size && !state.cats.has(i.category)) return false;
+    if (!state.q) return true;
+    const hay = norm([i.a, i.t, i.p, i.y, i.category].join(" "));
+    return norm(state.q).split(/\s+/).every(w => hay.includes(w));
+  }
+
+  function sorted(list) {
+    if (state.sort === "timeline") return [...list].sort((x, y) => (x.y ?? 9999) - (y.y ?? 9999) || x.a.localeCompare(y.a));
+    if (state.sort === "author") return [...list].sort((x, y) => x.a.localeCompare(y.a, "en", { sensitivity: "base" }) || (x.y ?? 0) - (y.y ?? 0));
+    return [...list].sort((x, y) => cats.indexOf(x.category) - cats.indexOf(y.category));
+  }
+  const currentList = () => sorted(items.filter(matches));
+
+  function itemHTML(i, timeline) {
+    const on = mine.has(i.id);
+    const pub = [i.p, !timeline && i.y && !String(i.p).includes(i.y) ? i.y : ""].filter(Boolean).join(", ");
+    const link = i.url ? ` · <a href="${esc(i.url)}" target="_blank" rel="noopener">Read online<span class="sr-only"> (opens in new tab)</span></a>` : "";
+    const tag = i.kind === "article" ? `<span class="tag">Essay</span>` : "";
+    const side = timeline ? "" : `<span class="side">${state.sort === "author" ? esc(i.category) : ""}</span>`;
+    return `<li class="item">
+      <button type="button" class="mark" data-id="${esc(i.id)}" aria-pressed="${on}" aria-label="Mark for my list: ${esc(i.t)}" title="Mark for my list">
+        <span aria-hidden="true"></span>
+      </button>
+      ${timeline ? `<span class="yr">${i.y ?? "n.d."}</span>` : ""}
+      <span>
+        <span class="author">${hl(i.a)}</span>${tag}
+        <span class="title">${hl(i.t)}</span>
+        <span class="meta">${[hl(pub), timeline ? esc(i.category) : ""].filter(Boolean).join(" · ")}${link}</span>
+      </span>
+      ${side}
+    </li>`;
+  }
+
+  function render() {
+    const list = currentList();
+    out.className = state.sort === "timeline" ? "timeline" : "";
+    const base = state.onlyMine ? mine.size : items.length;
+    document.getElementById("status").textContent = list.length === base ? `${base}` : `${list.length} / ${base}`;
+    document.getElementById("listnote").textContent = state.onlyMine
+      ? `My list · ${mine.size} ${mine.size === 1 ? "text" : "texts"}`
+      : { category: "By category", timeline: "By year of publication", author: "Authors A–Z" }[state.sort];
+
+    if (!list.length) {
+      out.innerHTML = `<p class="empty">${state.onlyMine && !mine.size
+        ? "Your list is empty. Mark a title with the square next to it."
+        : "Nothing matches. Try another search or category."}</p>`;
+      return;
+    }
+
+    let groups;
+    if (state.sort === "category") {
+      groups = cats.map(c => ({ head: c, cls: "", items: list.filter(i => i.category === c) })).filter(g => g.items.length);
+    } else if (state.sort === "timeline") {
+      const by = new Map();
+      list.forEach(i => {
+        const k = i.y ? `${Math.floor(i.y / 10) * 10}s` : "Undated";
+        by.has(k) || by.set(k, []); by.get(k).push(i);
+      });
+      groups = [...by].map(([k, v]) => ({ head: k, cls: "decade", items: v }));
+    } else {
+      groups = [{ head: null, items: list }];
+    }
+
+    const tl = state.sort === "timeline";
+    out.innerHTML = groups.map(g =>
+      (g.head ? `<h2 class="${g.cls}">${g.cls ? "" : `<span class="num">${String(cats.indexOf(g.head) + 1).padStart(2, "0")}</span>`}${esc(g.head)}</h2>` : "") +
+      `<ul class="list">${g.items.map(i => itemHTML(i, tl)).join("")}</ul>`
+    ).join("");
+  }
+
+  renderChips(); updateCount(); render();
+})();
+</script>
+</body>
+</html>
