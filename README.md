@@ -9,7 +9,7 @@ Reading list for the course *Advanced Introduction into ADP*, WS 25/26, Christop
 - **Category · Timeline · A–Z** — three ways to sort the 62 titles; Timeline groups them by decade.
 - **Search** — author, title, publisher or year (press `/` to jump to the field).
 - **Category links** — filter to one or more categories.
-- **My list** — mark texts of interest with the square next to a title. Copy the list as plain references or print it / save it as PDF. The list is stored only in your own browser.
+- **My list** — mark texts of interest with the square next to a title. Copy the list or print it / save it as PDF — both as a bibliography in Chicago style (18th ed.), sorted by author. The list is stored only in your own browser.
 - **Dark / Light** — switch in the top right corner.
 
 Views can be shared as links, e.g. `…/#sort=timeline&cat=7` (category numbers start at 0).

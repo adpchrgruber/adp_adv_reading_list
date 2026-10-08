@@ -142,16 +142,27 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
   .timeline li.item{grid-template-columns:26px 42px 1fr}
   li.item .side{display:none}
 }
+/* ---------- print: Chicago bibliography ---------- */
+#biblio{display:none}
 @media print{
-  .controls,footer,.skip,.actions,.mark,#theme,nav.tabs{display:none!important}
+  @page{margin:22mm 20mm}
+  header,.controls,main,footer,.skip{display:none!important}
   :root{--paper:#fff;--ink:#000;--muted:#555;--blue:#002FA7}
-  li.item,.timeline li.item{grid-template-columns:1fr auto;break-inside:avoid}
-  .timeline li.item{grid-template-columns:52px 1fr}
+  body{background:#fff;color:#000}
+  #biblio{display:block;max-width:none;padding:0}
+  #biblio .eyebrow{color:#555}
+  #biblio h1{font-size:28px;margin:10px 0 4px}
+  #biblio .subtitle{font-size:13px;margin-bottom:22px}
+  #biblio ol{list-style:none;font-size:11pt;line-height:1.45}
+  #biblio li{padding-left:2.2em;text-indent:-2.2em;margin:0 0 .55em;break-inside:avoid}
+  #biblio .dash{letter-spacing:-.14em;margin-right:.14em}
+  #biblio .style{margin-top:22px;font-size:8pt;letter-spacing:.08em;text-transform:uppercase;color:#555}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#list">Skip to list</a>
+<section id="biblio" class="wrap" aria-hidden="true"></section>
 
 <header>
   <div class="wrap">
@@ -315,16 +326,80 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
   });
 
   // Export my list
-  const cite = i => [i.a, i.t, [i.p, i.y && !String(i.p).includes(i.y) ? i.y : ""].filter(Boolean).join(", "), i.url]
-    .filter(Boolean).join(". ").replace(/\.\./g, ".") + ".";
+  // Chicago Manual of Style (18th ed.), bibliography entries. Returns HTML (titles in <i>).
+  const end = str => /[.?!]$/.test(str) ? str : str + ".";
+  function chicagoAuthors(a) {
+    const m = a.match(/\s*\((Eds?)\.\)\s*$/);
+    const names = a.replace(/\s*\(Eds?\.\)\s*$/, "").split(";").map(n => n.trim()).filter(Boolean);
+    const out = names.map((n, k) => {
+      if (k === 0) return n;                       // first author inverted: Last, First
+      const [last, ...first] = n.split(",").map(x => x.trim());
+      return first.length ? `${first.join(" ")} ${last}` : last;
+    });
+    let s = out.length < 3 ? out.join(out.length === 2 ? ", and " : "")
+                           : out.slice(0, -1).join(", ") + ", and " + out[out.length - 1];
+    if (m) s += m[1] === "Eds" || names.length > 1 ? ", eds" : ", ed";
+    return end(s);
+  }
+  function chicagoTitle(t) {
+    const br = t.match(/^(.*?)\s*(\[.*\])$/);    // keep bracketed notes out of the italics
+    return br ? `<i>${esc(br[1])}</i> ${esc(br[2])}` : `<i>${esc(t)}</i>`;
+  }
+  function chicago(i) {
+    const yr = i.ytext ?? i.y;
+    const parts = [esc(chicagoAuthors(i.a))];
+    if (i.kind === "article") {
+      parts.push(`“${esc(end(i.t))}”`);
+      if (i.journal) parts.push(`<i>${esc(i.journal)}</i>${i.no ? `, no. ${i.no}` : ""}${i.date ? ` (${esc(i.date)})` : ""}.`);
+      else parts.push(yr ? `${yr}.` : "n.d.");
+    } else {
+      parts.push(chicagoTitle(i.t) + (/[?!]$/.test(i.t) ? "" : "."));
+      if (i.edBy) parts.push(`Edited by ${esc(i.edBy)}.`);
+      const pub = [i.p, yr].filter(Boolean).map(esc).join(", ");
+      parts.push(pub ? `${pub}.` : "n.d.");
+    }
+    if (i.url) parts.push(`${esc(i.url)}.`);
+    return parts.join(" ");
+  }
+  const sortKey = i => norm(i.a);
+  const bibList = () => [...items.filter(matches)].sort((x, y) =>
+    sortKey(x).localeCompare(sortKey(y)) || (x.y ?? 0) - (y.y ?? 0));
+  // Successive works by the same author(s) get a 3-em dash instead of the name.
+  const chicagoList = list => list.map((i, k) => {
+    const c = chicago(i);
+    return k && list[k - 1].a === i.a ? c.replace(esc(chicagoAuthors(i.a)), `<span class="dash">———</span>.`) : c;
+  });
+  const plain = html => { const d = document.createElement("div"); d.innerHTML = html; return d.textContent; };
+
   const copyBtn = document.getElementById("copy");
   copyBtn.addEventListener("click", async () => {
-    const text = currentList().map(cite).join("\n");
-    try { await navigator.clipboard.writeText(text); copyBtn.textContent = "Copied ✓"; }
-    catch { prompt("Copy your list:", text); }
+    const html = chicagoList(bibList());
+    const text = html.map(plain).join("\n");
+    try {
+      // HTML keeps the italics when pasted into Word / Pages / Google Docs.
+      if (window.ClipboardItem) {
+        await navigator.clipboard.write([new ClipboardItem({
+          "text/html": new Blob([html.map(h => `<p>${h}</p>`).join("")], { type: "text/html" }),
+          "text/plain": new Blob([text], { type: "text/plain" })
+        })]);
+      } else await navigator.clipboard.writeText(text);
+      copyBtn.textContent = "Copied ✓";
+    } catch { prompt("Copy your list:", text); }
     setTimeout(() => copyBtn.textContent = "Copy list", 1600);
   });
-  document.getElementById("print").addEventListener("click", () => window.print());
+
+  const biblio = document.getElementById("biblio");
+  function buildBiblio() {
+    const list = bibList();
+    biblio.innerHTML = `
+      <p class="eyebrow">${state.onlyMine ? "My reading list" : "Reading list"} · ${esc(C.term)} · ${list.length} ${list.length === 1 ? "title" : "titles"}</p>
+      <h1>Bibliography</h1>
+      <p class="subtitle">${esc(C.title)} — ${esc(C.teacher)}</p>
+      <ol>${chicagoList(list).map(c => `<li>${c}</li>`).join("")}</ol>
+      <p class="style">Chicago Manual of Style, 18th edition · bibliography</p>`;
+  }
+  window.addEventListener("beforeprint", buildBiblio);
+  document.getElementById("print").addEventListener("click", () => { buildBiblio(); window.print(); });
 
   function matches(i) {
     if (state.onlyMine && !mine.has(i.id)) return false;
@@ -343,7 +418,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
 
   function itemHTML(i, timeline) {
     const on = mine.has(i.id);
-    const pub = [i.p, !timeline && i.y && !String(i.p).includes(i.y) ? i.y : ""].filter(Boolean).join(", ");
+    const pub = [i.p, !timeline && i.y ? (i.ytext ?? i.y) : ""].filter(Boolean).join(", ");
     const link = i.url ? ` · <a href="${esc(i.url)}" target="_blank" rel="noopener">Read online<span class="sr-only"> (opens in new tab)</span></a>` : "";
     const tag = i.kind === "article" ? `<span class="tag">Essay</span>` : "";
     const side = timeline ? "" : `<span class="side">${state.sort === "author" ? esc(i.category) : ""}</span>`;

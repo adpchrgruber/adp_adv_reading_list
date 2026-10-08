@@ -1,6 +1,9 @@
 // Reading list data — edit this file to add, remove or change entries.
 // Fields: a = author(s), t = title, y = year (number, used for the timeline),
 //         p = publisher / source, url = optional link, kind = "book" | "article"
+// Optional for citations: ytext = year as printed (e.g. "1983–85"),
+//         edBy = editors of an authored book, journal / no / date = for articles.
+// Authors: "Last, First" separated by ";" — add " (Ed.)" / " (Eds.)" for editors.
 // Categories are listed in display order; each entry sits under one.
 
 window.COURSE = {
@@ -17,7 +20,7 @@ window.READINGS = [
       { a: "Benjamin, Walter", t: "The Work of Art in the Age of Mechanical Reproduction", p: "", y: 1936, kind: "article" },
       { a: "Butler, Judith", t: "Gender Trouble: Feminism and the Subversion of Identity", p: "Routledge", y: 1990 },
       { a: "Crary, Jonathan", t: "Techniques of the Observer: On Vision and Modernity in the 19th Century", p: "MIT Press", y: 1990 },
-      { a: "Deleuze, Gilles", t: "Cinema 1: The Movement-Image & Cinema 2: The Time-Image", p: "University of Minnesota Press, 1983/1985", y: 1983 },
+      { a: "Deleuze, Gilles", t: "Cinema 1: The Movement-Image & Cinema 2: The Time-Image", p: "University of Minnesota Press", y: 1983, ytext: "1983–85" },
       { a: "Kittler, Friedrich", t: "Optical Media: Berlin Lectures 1999", p: "Polity Press", y: 2010 },
       { a: "Manovich, Lev", t: "The Language of New Media", p: "MIT Press", y: 2001 },
       { a: "Rancière, Jacques", t: "The Future of the Image", p: "Verso", y: 2007 }
@@ -28,14 +31,15 @@ window.READINGS = [
     items: [
       { a: "Gursky, Andreas", t: "Architecture", p: "Hatje Cantz", y: 2008 },
       { a: "Baan, Iwan", t: "Iwan Baan: 52 Weeks, 52 Cities", p: "", y: null },
-      { a: "Princen, Bas; Geers, Kersten; Küng, Moritz; Manaugh, Geoff", t: "Bas Princen. The Construction of an Image", p: "London: Bedford Press", y: 2016 },
+      { a: "Princen, Bas; Geers, Kersten; Küng, Moritz; Manaugh, Geoff", t: "Bas Princen: The Construction of an Image", p: "London: Bedford Press", y: 2016 },
       { a: "Colomina, Beatriz", t: "Privacy and Publicity: Modern Architecture as Mass Media", p: "MIT Press", y: 1996 },
       { a: "Demand, Thomas", t: "Model Studies", p: "London: Ivory Press", y: 2011 },
       { a: "Demand, Thomas", t: "Model Studies: 1+2", p: "Köln: Verlag der Buchhandlung Walther König", y: 2015 },
       { a: "Demand, Thomas", t: "House of Card", p: "MACK", y: 2020 },
       { a: "Fitz, Angelika; Lenz, Gabriele", t: "Vom Nutzen der Architekturfotografie: Positionen zur Beziehung von Bild und Architektur", p: "Birkhäuser", y: 2015 },
       { a: "Frampton, Kenneth", t: "Labour, Work and Architecture: Collected Essays on Architecture and Design", p: "Phaidon", y: 2002 },
-      { a: "Linke, Armin; Jovanović Weiss, Srdjan (ed. Bezzola, Bosshard, Ursprung)", t: "Socialist Architecture: The Vanishing Act", p: "Zürich: Codax", y: 2012 },
+      { a: "Linke, Armin; Jovanović Weiss, Srdjan", t: "Socialist Architecture: The Vanishing Act", p: "Zürich: Codax", y: 2012,
+        edBy: "Tobia Bezzola, Markus Bosshard, and Philip Ursprung" },
       { a: "Pardo, Alona; Redstone, Elias (Eds.)", t: "Constructing Worlds: Photography and Architecture in the Modern Age", p: "Prestel", y: 2014 },
       { a: "Ryan, Zoe (Ed.)", t: "Hélène Binet: Composing Space", p: "", y: null },
       { a: "Sbriglio, Jacques, et al.", t: "Le Corbusier & Lucien Hervé: A Dialogue between Architect and Photographer", p: "Getty Publications", y: 2011 }
@@ -52,6 +56,7 @@ window.READINGS = [
       { a: "Pasquinelli, Matteo", t: "The Eye of the Master: A Social History of Artificial Intelligence", p: "Verso", y: 2023 },
       { a: "Uricchio, William", t: "We Have Never Been Digital: Cognition, Computation, and the Rise of Artificial Intelligence", p: "MIT Press", y: 2024 },
       { a: "Steyerl, Hito", t: "In Defense of the Poor Image", p: "e-flux Journal, no. 10, November 2009", y: 2009, kind: "article",
+        journal: "e-flux Journal", no: 10, date: "November 2009",
         url: "https://www.e-flux.com/journal/10/61362/in-defense-of-the-poor-image/" }
     ]
   },
@@ -60,7 +65,7 @@ window.READINGS = [
     items: [
       { a: "Azoulay, Ariella", t: "The Civil Contract of Photography", p: "MIT Press", y: 2008 },
       { a: "Batchen, Geoffrey", t: "Burning with Desire: The Conception of Photography", p: "MIT Press", y: 1997 },
-      { a: "Becher, Bernd & Hilla", t: "Basic Forms – Grundformen", p: "Schirmer Mosel", y: 2014 },
+      { a: "Becher, Bernd; Becher, Hilla", t: "Basic Forms – Grundformen", p: "Schirmer Mosel", y: 2014 },
       { a: "Didi-Huberman, Georges", t: "Images in Spite of All: Four Photographs from Auschwitz", p: "University of Chicago Press", y: 2008 },
       { a: "Fontcuberta, Joan", t: "Pandora’s Camera: Photography after Photography", p: "Mack", y: 2014 },
       { a: "Lister, Martin", t: "The Photographic Image in Digital Culture", p: "Routledge", y: 2013 },
@@ -108,7 +113,8 @@ window.READINGS = [
     items: [
       { a: "Parikka, Jussi", t: "Operational Images: From the Visual to the Invisual", p: "University of Minnesota Press", y: 2023 },
       { a: "Eder, Jens; Klonk, Charlotte (Eds.)", t: "Image Operations: Visual Media and Political Conflict", p: "Manchester University Press", y: 2016 },
-      { a: "Paglen, Trevor", t: "Operational Images", p: "e-flux Journal, no. 59, November 2014", y: 2014, kind: "article" },
+      { a: "Paglen, Trevor", t: "Operational Images", p: "e-flux Journal, no. 59, November 2014", y: 2014, kind: "article",
+        journal: "e-flux Journal", no: 59, date: "November 2014" },
       { a: "Flusser, Vilém", t: "Towards a Philosophy of Photography", p: "Reaktion Books", y: 1984 },
       { a: "Flusser, Vilém", t: "Into the Universe of Technical Images", p: "University of Minnesota Press", y: 2011 }
     ]
