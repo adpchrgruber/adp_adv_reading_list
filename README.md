@@ -10,6 +10,7 @@ Reading list for the course *Advanced Introduction into ADP*, WS 25/26, Christop
 - **Search** — author, title, publisher or year (press `/` to jump to the field).
 - **Category links** — filter to one or more categories.
 - **My list** — mark texts of interest with the square next to a title. Copy the list or print it / save it as PDF — both as a bibliography in Chicago style (18th ed.), sorted by author. The list is stored only in your own browser.
+- **Search library** — each entry links to a search for it in the Academy library catalogue (Summon), limited to the library’s own holdings.
 - **Dark / Light** — switch in the top right corner.
 
 Views can be shared as links, e.g. `…/#sort=timeline&cat=7` (category numbers start at 0).

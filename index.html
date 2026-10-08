@@ -416,10 +416,21 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
   }
   const currentList = () => sorted(items.filter(matches));
 
+  // Academy of Fine Arts Vienna library (Summon): main title + first author's surname,
+  // restricted to the library's own holdings (ho=t).
+  const LIBRARY = "https://akbild.summon.serialssolutions.com/de-DE/#!/search?ho=t&l=de-DE&q=";
+  function libraryURL(i) {
+    const title = i.t.replace(/\[.*?\]/g, "").split(":")[0];
+    const surname = i.a.split(/[;,]/)[0];
+    const q = `${title} ${surname}`.replace(/[“”"&]/g, " ").replace(/\s+/g, " ").trim();
+    return LIBRARY + encodeURIComponent(q);
+  }
+
   function itemHTML(i, timeline) {
     const on = mine.has(i.id);
     const pub = [i.p, !timeline && i.y ? (i.ytext ?? i.y) : ""].filter(Boolean).join(", ");
-    const link = i.url ? ` · <a href="${esc(i.url)}" target="_blank" rel="noopener">Read online<span class="sr-only"> (opens in new tab)</span></a>` : "";
+    const lib = `<a href="${libraryURL(i)}" target="_blank" rel="noopener">Search library<span class="sr-only"> for this title at the Academy library (opens in new tab)</span> ↗</a>`;
+    const link = i.url ? `<a href="${esc(i.url)}" target="_blank" rel="noopener">Read online<span class="sr-only"> (opens in new tab)</span></a>` : "";
     const tag = i.kind === "article" ? `<span class="tag">Essay</span>` : "";
     const side = timeline ? "" : `<span class="side">${state.sort === "author" ? esc(i.category) : ""}</span>`;
     return `<li class="item">
@@ -430,7 +441,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
       <span>
         <span class="author">${hl(i.a)}</span>${tag}
         <span class="title">${hl(i.t)}</span>
-        <span class="meta">${[hl(pub), timeline ? esc(i.category) : ""].filter(Boolean).join(" · ")}${link}</span>
+        <span class="meta">${[hl(pub), timeline ? esc(i.category) : "", link, lib].filter(Boolean).join(" · ")}</span>
       </span>
       ${side}
     </li>`;
